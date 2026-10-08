@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Structured JSON logs (traceId/batchId from MDC) unless the 'textlogs' profile is active. Payloads are never logged. -->
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <springProperty name="appName" source="spring.application.name"/>
+
+  <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <customFields>{"service":"${appName}"}</customFields>
+      <includeMdcKeyName>traceId</includeMdcKeyName>
+      <includeMdcKeyName>batchId</includeMdcKeyName>
+    </encoder>
+  </appender>
+  <appender name="TEXT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{24} trace=%X{traceId:-} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <springProfile name="textlogs"><root level="INFO"><appender-ref ref="TEXT"/></root></springProfile>
+  <springProfile name="!textlogs"><root level="INFO"><appender-ref ref="JSON"/></root></springProfile>
+</configuration>

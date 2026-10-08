@@ -1,0 +1,26 @@
+# Sync baseline: reproduces the old design (all work before the response) for the sync-vs-async experiment.
+spring:
+  autoconfigure:
+    exclude: []
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5442/rp1}
+    username: ${DB_USER:rp1}
+    password: ${DB_PASSWORD:rp1}
+    hikari:
+      maximum-pool-size: 210            # > Tomcat threads: the old system's limit was the downstream, not the pool
+
+rp1:
+  ingest:
+    mode: sync
+    max-in-flight: 100000               # the old system had no bulkhead; shedding would hide the cliff
+  downstream:
+    capacity: ${DOWNSTREAM_CAPACITY:8}
+    service-time: ${DOWNSTREAM_SERVICE_TIME:2ms}
+    acquire-timeout: 60s                # old system waited on the downstream instead of failing fast
+
+management:
+  endpoint:
+    health:
+      group:
+        readiness:
+          include: readinessState,db

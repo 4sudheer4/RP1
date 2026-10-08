@@ -16,8 +16,9 @@
 
   <modules>
     <module>common</module>
+    <module>testkit</module>
     <module>sink</module>
-    <!--module>ingest-service</module-->
+    <module>ingest-service</module>
     <!--module>consumer-service</module-->
     <!--module>loadgen</module-->
   </modules>
@@ -25,12 +26,16 @@
   <properties>
     <java.version>21</java.version>
     <resilience4j.version>2.2.0</resilience4j.version>
+    <!-- 1.20.x adds org.testcontainers.kafka.KafkaContainer (apache/kafka image, same as compose) and
+         withListener(listener, advertisedSupplier), needed to put Kafka behind Toxiproxy in tests. -->
+    <testcontainers.version>1.20.6</testcontainers.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
       <dependency><groupId>com.rp1</groupId><artifactId>common</artifactId><version>${project.version}</version></dependency>
       <dependency><groupId>com.rp1</groupId><artifactId>sink</artifactId><version>${project.version}</version></dependency>
+      <dependency><groupId>com.rp1</groupId><artifactId>testkit</artifactId><version>${project.version}</version></dependency>
       <dependency><groupId>io.github.resilience4j</groupId><artifactId>resilience4j-circuitbreaker</artifactId><version>${resilience4j.version}</version></dependency>
     </dependencies>
   </dependencyManagement>
@@ -43,6 +48,11 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
+          <configuration>
+            <!-- Docker Desktop can make Testcontainers report 0.0.0.0 as the host; Kafka refuses to advertise it. -->
+            <environmentVariables><TESTCONTAINERS_HOST_OVERRIDE>localhost</TESTCONTAINERS_HOST_OVERRIDE></environmentVariables>
+            <forkedProcessExitTimeoutInSeconds>60</forkedProcessExitTimeoutInSeconds>
+          </configuration>
           <executions>
             <execution><goals><goal>integration-test</goal><goal>verify</goal></goals></execution>
           </executions>

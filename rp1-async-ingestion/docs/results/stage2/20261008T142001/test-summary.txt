@@ -1,0 +1,10 @@
+# Stage 2 gate: mvn -pl ingest-service -am verify (Thu Oct  8 14:20:01 PDT 2026)
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.174 s -- in com.rp1.common.EnvelopeFactoryTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.064 s -- in com.rp1.common.EventTypeTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.081 s -- in com.rp1.sink.CallbackSinkIT
+Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.738 s -- in com.rp1.ingest.api.CallbackControllerTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s -- in com.rp1.ingest.engine.BodyReaderTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.552 s -- in com.rp1.ingest.engine.KafkaIngestPathTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in com.rp1.ingest.engine.SignatureVerifierTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.38 s -- in com.rp1.ingest.it.IngestKafkaIT
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.654 s -- in com.rp1.ingest.it.IngestSyncModeIT

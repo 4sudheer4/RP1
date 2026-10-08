@@ -1,0 +1,91 @@
+spring:
+  application:
+    name: ingest-service
+  # Async mode needs no database; the sync profile re-enables these.
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+  lifecycle:
+    timeout-per-shutdown-phase: 10s     # > hard deadline: every in-flight request can finish (200 or 503)
+  threads:
+    virtual:
+      enabled: false                    # bounded platform pool + explicit bulkhead; behavior is easier to reason about
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:39092,localhost:39093,localhost:39094}  # via Toxiproxy
+    producer:
+      client-id: ingest-${HOSTNAME:local}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      acks: all                         # 200 means "on min.insync.replicas brokers", not "on the leader"
+      compression-type: lz4             # cheap CPU, ~2-4x smaller JSON batches on the wire and disk
+      batch-size: 65536                 # one SFMC batch (<=1000 events) per partition fits in few requests
+      properties:
+        enable.idempotence: true        # broker dedups producer retries: no duplicates from our own retries
+        max.in.flight.requests.per.connection: 5   # max allowed with idempotence; keeps per-partition order
+        linger.ms: 5                    # small: we await acks in-request, so latency matters more than batching
+        # Timeouts are nested inside the 1.5s handler deadline:
+        #   max.block.ms (500) bounds send() blocking on metadata/buffer;
+        #   delivery.timeout.ms (1200) >= linger.ms + request.timeout.ms (5 + 1000), required by the client;
+        #   handler deadline (1500) > delivery.timeout.ms, so the future normally fails before we give up.
+        max.block.ms: 500
+        request.timeout.ms: 1000
+        delivery.timeout.ms: 1200
+        retry.backoff.ms: 50            # retry fast within the short delivery window (default 100)
+
+server:
+  port: ${PORT:8080}
+  shutdown: graceful                    # stop accepting, finish in-flight, then close
+  tomcat:
+    threads:
+      max: 200                          # Tomcat default; the bulkhead below caps actual concurrent work
+    accept-count: 50                    # small backlog: shed via 503 rather than queue past SFMC's timeout
+    connection-timeout: 2s              # matches SFMC's 2s budget; slow-loris bodies get dropped
+    max-swallow-size: 2MB               # after a 413 we drain at most this much before closing the connection
+
+rp1:
+  ingest:
+    mode: async
+    hard-deadline: 1500ms
+    min-produce-budget: 100ms
+    max-body-bytes: 2097152             # 2 MiB: 1000 events x ~1-2 KB; SFMC maxBatchSize is 1000
+    max-batch-events: 1000
+    max-in-flight: 64
+    max-clock-skew: 5m
+    retry-after-seconds: 1
+    signature:
+      enabled: true
+      keys: ${RP1_SIGNATURE_KEYS:}      # comma-separated, current first; never committed
+      key-encoding: ${RP1_SIGNATURE_KEY_ENCODING:UTF8}
+    verification:
+      enabled: ${RP1_ENS_VERIFICATION_ENABLED:false}
+      expected-callback-id: ${RP1_ENS_CALLBACK_ID:}
+    breaker:
+      failure-rate-threshold: 50
+      sliding-window-size: 20
+      minimum-number-of-calls: 10
+      wait-in-open-state: 5s
+      slow-call-threshold: 1000ms
+      slow-call-rate-threshold: 80
+    sync:
+      client-timeout: 2s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,producerReadiness
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  level:
+    org.apache.kafka: WARN
