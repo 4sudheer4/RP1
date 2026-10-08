@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: rp1
+    folder: RP1
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards   # dashboards land here in stage 6
