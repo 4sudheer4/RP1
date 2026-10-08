@@ -1,0 +1,8 @@
+target/
+*.class
+.idea/
+*.iml
+.vscode/
+.DS_Store
+infra/gate/target/
+docs/results/**/ledger/
