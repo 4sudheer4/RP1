@@ -6,3 +6,10 @@ target/
 .DS_Store
 infra/gate/target/
 docs/results/**/ledger/
+# Experiment raw data stays local (ledgers are ~10 MB/run); summaries, verify output and results tables are committed.
+docs/results/stage5/**/events.csv
+docs/results/stage5/**/batches.csv
+docs/results/stage5/**/*.prom
+docs/results/stage5/**/*.logs/
+docs/results/stage5/**/logs/
+docs/results/stage5/**/*.log

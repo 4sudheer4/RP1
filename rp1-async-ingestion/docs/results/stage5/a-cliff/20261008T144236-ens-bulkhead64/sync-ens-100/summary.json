@@ -1,0 +1,60 @@
+{
+  "runId" : "rmv02ebvl",
+  "startedAt" : "2026-10-08T21:44:50.928454Z",
+  "finishedAt" : "2026-10-08T21:45:30.947280Z",
+  "config" : {
+    "url" : "http://localhost:8080/callbacks",
+    "rateBatchesPerSec" : 100.0,
+    "durationS" : 40,
+    "batchSize" : 20,
+    "clientTimeoutMs" : 2000,
+    "retries" : 3,
+    "retryDelaysMs" : [ 1000, 2000, 4000 ],
+    "hotFraction" : 0.0,
+    "invalidFraction" : 0.0,
+    "poisonCount" : 0,
+    "suspendAfter" : 2,
+    "suspendMs" : 10000
+  },
+  "batches" : 4000,
+  "events" : 80000,
+  "batchCaptureFirstAttempt" : 0.06475,
+  "batchCaptureEventual" : 0.1385,
+  "batchesDropped" : 3446,
+  "batchesDroppedBySuspension" : 3441,
+  "suspensions" : 364,
+  "httpAttempts" : 1318,
+  "clientAttemptsPerBatch" : 0.3295,
+  "statusCounts" : {
+    "first:200" : 259,
+    "first:timeout" : 300,
+    "retry:200" : 295,
+    "retry:timeout" : 464
+  },
+  "firstAttemptLatencyMs" : {
+    "count" : 559,
+    "p50" : 1999,
+    "p90" : 2006,
+    "p99" : 2033,
+    "p999" : 2038,
+    "max" : 2038
+  },
+  "allAttemptsLatencyMs" : {
+    "count" : 1318,
+    "p50" : 2000,
+    "p90" : 2008,
+    "p99" : 2028,
+    "p999" : 2043,
+    "max" : 2045
+  },
+  "serverMetricsDelta" : {
+    "rp1_ingest_ack_latency_seconds_count{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 1318.0,
+    "rp1_ingest_ack_latency_seconds_max{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 12.068606625,
+    "rp1_ingest_ack_latency_seconds_sum{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 2930.204861522,
+    "rp1_ingest_events_total{application=\"ingest-service\",result=\"valid\"}" : 26360.0,
+    "rp1_ingest_responses_total{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 1318.0,
+    "rp1_ingest_signature_total{application=\"ingest-service\",key=\"current\"}" : 1318.0,
+    "rp1_ingest_sync_batches_total{application=\"ingest-service\",late=\"false\"}" : 764.0,
+    "rp1_ingest_sync_batches_total{application=\"ingest-service\",late=\"true\"}" : 554.0
+  }
+}

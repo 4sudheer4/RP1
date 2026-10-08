@@ -50,7 +50,11 @@ rp1:
     min-produce-budget: 100ms
     max-body-bytes: 2097152             # 2 MiB: 1000 events x ~1-2 KB; SFMC maxBatchSize is 1000
     max-batch-events: 1000
-    max-in-flight: 64
+    # Little's law: in-flight = arrival rate x time in system. Each request is bounded by the 1.5s deadline, so
+    # 180 admits ~120 batches/s even at full deadline latency. 64 shed 0.6% of requests at 100 b/s during
+    # normal p99 bursts (Stage 5, a-cliff/*-ens-bulkhead64), which under ENS suspension rules dropped 25% of
+    # batches. Keep it below Tomcat's 200 threads so shedding happens here, with a 503, not in the accept queue.
+    max-in-flight: 180
     max-clock-skew: 5m
     retry-after-seconds: 1
     signature:

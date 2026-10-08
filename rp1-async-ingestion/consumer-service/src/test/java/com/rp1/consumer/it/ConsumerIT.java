@@ -71,8 +71,8 @@ class ConsumerIT {
         String key = p + "-s1"; // "poison-" prefix => downstream permanent 400 (fault marker)
         send(envelope("EmailSent", key, p + "-bad", 1));
         ConsumerItSupport.sendRaw(key, "{not json".getBytes(StandardCharsets.UTF_8));
-        // same key -> same partition, queued behind the poison records
-        String goodKey = "good-" + p;
+        // a key that hashes to the poison key's partition, so the good events are queued behind the poison
+        String goodKey = samePartitionKey(key, "good-" + p);
         for (int i = 0; i < 20; i++) send(envelope("EmailSent", goodKey, p + "-ok" + i, i));
 
         try (var app = startConsumer("g-" + p)) {
@@ -95,6 +95,16 @@ class ConsumerIT {
         }
         assertThat(dlt).anySatisfy(r -> assertThat(new String(r.value(), StandardCharsets.UTF_8)).isEqualTo("{not json"));
         assertThat(count("SELECT count(*) FROM callback_event WHERE subscriber_key = ?", key)).isZero();
+    }
+
+    private static String samePartitionKey(String key, String prefix) {
+        int target = partition(key);
+        for (int i = 0; ; i++) if (partition(prefix + "-" + i) == target) return prefix + "-" + i;
+    }
+
+    private static int partition(String key) { // Kafka's default partitioner for keyed records
+        return org.apache.kafka.common.utils.Utils.toPositive(
+                org.apache.kafka.common.utils.Utils.murmur2(key.getBytes(StandardCharsets.UTF_8))) % 12;
     }
 
     @Test

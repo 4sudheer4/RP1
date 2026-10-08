@@ -39,7 +39,9 @@ public class CallbackListener {
         this.registry = registry;
     }
 
-    @KafkaListener(id = MAIN_ID, topics = Topics.CALLBACK_EVENTS, concurrency = "${rp1.consumer.concurrency}")
+    // idIsGroup=false: without it Spring uses the listener id ("callbacks") as group.id and silently ignores
+    // spring.kafka.consumer.group-id (found via kafka-exporter during Stage 5).
+    @KafkaListener(id = MAIN_ID, idIsGroup = false, topics = Topics.CALLBACK_EVENTS, concurrency = "${rp1.consumer.concurrency}")
     public void onRecord(ConsumerRecord<String, CallbackEnvelope> record) {
         CallbackEnvelope e = record.value();
         MDC.put("traceId", e.traceId());

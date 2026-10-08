@@ -9,11 +9,11 @@
 if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
 source "$(dirname "$0")/lib.sh"
 
-MODES="sync async"; RATES="40 60 70 80 90 100 120"; DURATION=40; ENS=()
+MODES="sync async"; RATES="40 60 70 80 90 100 120"; DURATION=40; ENS=(); ENS_DESC=off
 BATCH=20; CAPACITY=8; SERVICE_TIME=5ms
 while [[ $# -gt 0 ]]; do case $1 in
   --modes) MODES=$2; shift 2;; --rates) RATES=$2; shift 2;; --duration) DURATION=$2; shift 2;;
-  --ens-suspension) ENS=(--suspend-after 2 --suspend-ms 10000); shift;;
+  --ens-suspension) ENS=(--suspend-after 2 --suspend-ms 10000); ENS_DESC="2 consecutive failures -> 10s suspension (60x time scale)"; shift;;
   *) echo "unknown $1"; exit 2;; esac; done
 
 require_jars
@@ -25,13 +25,13 @@ cat > "$OUT/README.md" <<EOF
   => theoretical max ~ ${CAPACITY} / (${SERVICE_TIME} x ${BATCH}) batches/s.
 - Sync: ingest 'sync' profile does all work before responding. Async: ingest acks after acks=all produce;
   one consumer instance (3 threads) does the same work.
-- ENS suspension model: ${ENS[*]:-off}.
+- ENS suspension model: ${ENS_DESC}.
 - Rates: ${RATES}. Machine: $(sysctl -n machdep.cpu.brand_string 2>/dev/null || uname -m), $(($(sysctl -n hw.memsize)/1073741824)) GB RAM; Docker VM $(docker info --format '{{.MemTotal}}' | awk '{printf "%.1f GB", $1/1073741824}').
 EOF
 
 for mode in $MODES; do
   for rate in $RATES; do
-    run="$OUT/$mode${ENS:+-ens}-$rate"; mkdir -p "$run.logs"
+    run="$OUT/$mode${ENS[0]+-ens}-$rate"; mkdir -p "$run.logs"
     log "=== mode=$mode rate=$rate/s ==="
     new_key; reset_env
     common=(--rp1.downstream.capacity=$CAPACITY --rp1.downstream.service-time=$SERVICE_TIME)
@@ -41,7 +41,7 @@ for mode in $MODES; do
       start_ingest async "$run.logs"
       start_consumer 0 "$run.logs" "${common[@]}"
     fi
-    loadgen_run "$run" --rate "$rate" --duration "$DURATION" --batch-size $BATCH "${ENS[@]}"
+    loadgen_run "$run" --rate "$rate" --duration "$DURATION" --batch-size $BATCH ${ENS[@]+"${ENS[@]}"}
     log "sent: first=$(json "$run/summary.json" batchCaptureFirstAttempt) eventual=$(json "$run/summary.json" batchCaptureEventual)"
     loadgen_verify "$run" --stable-s 10 --max-wait-s 900
     curl -s --max-time 10 http://localhost:8080/actuator/prometheus > "$run/metrics-final.prom" || true

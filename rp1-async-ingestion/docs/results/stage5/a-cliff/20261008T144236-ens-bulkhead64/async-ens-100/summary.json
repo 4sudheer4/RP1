@@ -1,0 +1,61 @@
+{
+  "runId" : "rmv02nl0k",
+  "startedAt" : "2026-10-08T21:52:02.349418Z",
+  "finishedAt" : "2026-10-08T21:52:42.390515Z",
+  "config" : {
+    "url" : "http://localhost:8080/callbacks",
+    "rateBatchesPerSec" : 100.0,
+    "durationS" : 40,
+    "batchSize" : 20,
+    "clientTimeoutMs" : 2000,
+    "retries" : 3,
+    "retryDelaysMs" : [ 1000, 2000, 4000 ],
+    "hotFraction" : 0.0,
+    "invalidFraction" : 0.0,
+    "poisonCount" : 0,
+    "suspendAfter" : 2,
+    "suspendMs" : 10000
+  },
+  "batches" : 4000,
+  "events" : 80000,
+  "batchCaptureFirstAttempt" : 0.74475,
+  "batchCaptureEventual" : 0.74925,
+  "batchesDropped" : 1003,
+  "batchesDroppedBySuspension" : 1003,
+  "suspensions" : 9,
+  "httpAttempts" : 3015,
+  "clientAttemptsPerBatch" : 0.75375,
+  "statusCounts" : {
+    "first:200" : 2979,
+    "first:503" : 18,
+    "retry:200" : 18
+  },
+  "firstAttemptLatencyMs" : {
+    "count" : 2997,
+    "p50" : 24,
+    "p90" : 101,
+    "p99" : 387,
+    "p999" : 588,
+    "max" : 617
+  },
+  "allAttemptsLatencyMs" : {
+    "count" : 3015,
+    "p50" : 24,
+    "p90" : 104,
+    "p99" : 379,
+    "p999" : 585,
+    "max" : 617
+  },
+  "serverMetricsDelta" : {
+    "rp1_ingest_ack_latency_seconds_count{application=\"ingest-service\",cause=\"accepted\",mode=\"async\",status=\"200\"}" : 2997.0,
+    "rp1_ingest_ack_latency_seconds_count{application=\"ingest-service\",cause=\"bulkhead_full\",mode=\"async\",status=\"503\"}" : 18.0,
+    "rp1_ingest_ack_latency_seconds_max{application=\"ingest-service\",cause=\"accepted\",mode=\"async\",status=\"200\"}" : 0.55647675,
+    "rp1_ingest_ack_latency_seconds_max{application=\"ingest-service\",cause=\"bulkhead_full\",mode=\"async\",status=\"503\"}" : 7.7375E-5,
+    "rp1_ingest_ack_latency_seconds_sum{application=\"ingest-service\",cause=\"accepted\",mode=\"async\",status=\"200\"}" : 124.131370095,
+    "rp1_ingest_ack_latency_seconds_sum{application=\"ingest-service\",cause=\"bulkhead_full\",mode=\"async\",status=\"503\"}" : 9.89251E-4,
+    "rp1_ingest_events_total{application=\"ingest-service\",result=\"valid\"}" : 59940.0,
+    "rp1_ingest_responses_total{application=\"ingest-service\",cause=\"accepted\",mode=\"async\",status=\"200\"}" : 2997.0,
+    "rp1_ingest_responses_total{application=\"ingest-service\",cause=\"bulkhead_full\",mode=\"async\",status=\"503\"}" : 18.0,
+    "rp1_ingest_signature_total{application=\"ingest-service\",key=\"current\"}" : 2997.0
+  }
+}

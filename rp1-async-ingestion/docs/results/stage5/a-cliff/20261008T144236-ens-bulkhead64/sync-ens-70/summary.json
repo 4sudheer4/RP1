@@ -1,0 +1,59 @@
+{
+  "runId" : "rmv02cz8v",
+  "startedAt" : "2026-10-08T21:43:47.564683Z",
+  "finishedAt" : "2026-10-08T21:44:27.990719Z",
+  "config" : {
+    "url" : "http://localhost:8080/callbacks",
+    "rateBatchesPerSec" : 70.0,
+    "durationS" : 40,
+    "batchSize" : 20,
+    "clientTimeoutMs" : 2000,
+    "retries" : 3,
+    "retryDelaysMs" : [ 1000, 2000, 4000 ],
+    "hotFraction" : 0.0,
+    "invalidFraction" : 0.0,
+    "poisonCount" : 0,
+    "suspendAfter" : 2,
+    "suspendMs" : 10000
+  },
+  "batches" : 2800,
+  "events" : 56000,
+  "batchCaptureFirstAttempt" : 0.422143,
+  "batchCaptureEventual" : 0.45,
+  "batchesDropped" : 1540,
+  "batchesDroppedBySuspension" : 1540,
+  "suspensions" : 17,
+  "httpAttempts" : 1338,
+  "clientAttemptsPerBatch" : 0.477857,
+  "statusCounts" : {
+    "first:200" : 1182,
+    "first:timeout" : 78,
+    "retry:200" : 78
+  },
+  "firstAttemptLatencyMs" : {
+    "count" : 1260,
+    "p50" : 735,
+    "p90" : 1726,
+    "p99" : 2002,
+    "p999" : 2007,
+    "max" : 2012
+  },
+  "allAttemptsLatencyMs" : {
+    "count" : 1338,
+    "p50" : 706,
+    "p90" : 1680,
+    "p99" : 2002,
+    "p999" : 2007,
+    "max" : 2012
+  },
+  "serverMetricsDelta" : {
+    "rp1_ingest_ack_latency_seconds_count{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 1338.0,
+    "rp1_ingest_ack_latency_seconds_max{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 3.550708208,
+    "rp1_ingest_ack_latency_seconds_sum{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 1103.30826828,
+    "rp1_ingest_events_total{application=\"ingest-service\",result=\"valid\"}" : 26760.0,
+    "rp1_ingest_responses_total{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 1338.0,
+    "rp1_ingest_signature_total{application=\"ingest-service\",key=\"current\"}" : 1338.0,
+    "rp1_ingest_sync_batches_total{application=\"ingest-service\",late=\"false\"}" : 1261.0,
+    "rp1_ingest_sync_batches_total{application=\"ingest-service\",late=\"true\"}" : 77.0
+  }
+}

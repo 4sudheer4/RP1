@@ -48,6 +48,9 @@ public class RetryTopicConfig extends RetryTopicConfigurationSupport {
                 .notRetryOn(List.of(NonRetryableException.class, DeserializationException.class))
                 .traversingCauses()
                 .concurrency(2)
+                // No in-app DLT consumer: alerting reads DLT offsets and replay is an explicit tool. Spring's default
+                // DLT listener would only log, and errors on records whose bytes are not an envelope.
+                .autoStartDltHandler(false)
                 .create(template);
     }
 
@@ -65,6 +68,13 @@ public class RetryTopicConfig extends RetryTopicConfigurationSupport {
             h.add(new RecordHeader(Headers.ERROR_CLASS, classify(ex).getBytes(StandardCharsets.UTF_8)));
             return h;
         }));
+    }
+
+    /** Retry topics have the main topic's 12 partitions (keep the partition); the DLT has 3, so let the key decide. */
+    @Override
+    protected java.util.function.Consumer<org.springframework.kafka.retrytopic.DeadLetterPublishingRecovererFactory>
+            configureDeadLetterPublishingContainerFactory() {
+        return factory -> factory.setPartitionResolver((record, topic) -> topic.endsWith(Topics.DLT_SUFFIX) ? null : record.partition());
     }
 
     @Override
