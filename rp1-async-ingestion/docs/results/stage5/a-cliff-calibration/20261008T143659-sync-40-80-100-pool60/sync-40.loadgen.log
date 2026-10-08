@@ -1,0 +1,58 @@
+{
+  "runId" : "rmv024fte",
+  "startedAt" : "2026-10-08T21:37:09.500503Z",
+  "finishedAt" : "2026-10-08T21:37:39.760623Z",
+  "config" : {
+    "url" : "http://localhost:8080/callbacks",
+    "rateBatchesPerSec" : 40.0,
+    "durationS" : 30,
+    "batchSize" : 20,
+    "clientTimeoutMs" : 2000,
+    "retries" : 3,
+    "retryDelaysMs" : [ 1000, 2000, 4000 ],
+    "hotFraction" : 0.0,
+    "invalidFraction" : 0.0,
+    "poisonCount" : 0,
+    "suspendAfter" : 0,
+    "suspendMs" : 600000
+  },
+  "batches" : 1200,
+  "events" : 24000,
+  "batchCaptureFirstAttempt" : 0.998333,
+  "batchCaptureEventual" : 1.0,
+  "batchesDropped" : 0,
+  "batchesDroppedBySuspension" : 0,
+  "suspensions" : 0,
+  "httpAttempts" : 1202,
+  "clientAttemptsPerBatch" : 1.001667,
+  "statusCounts" : {
+    "first:200" : 1198,
+    "first:timeout" : 2,
+    "retry:200" : 2
+  },
+  "firstAttemptLatencyMs" : {
+    "count" : 1200,
+    "p50" : 365,
+    "p90" : 1177,
+    "p99" : 1634,
+    "p999" : 2003,
+    "max" : 2006
+  },
+  "allAttemptsLatencyMs" : {
+    "count" : 1202,
+    "p50" : 364,
+    "p90" : 1177,
+    "p99" : 1634,
+    "p999" : 2003,
+    "max" : 2006
+  },
+  "serverMetricsDelta" : {
+    "rp1_ingest_ack_latency_seconds_count{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 1202.0,
+    "rp1_ingest_ack_latency_seconds_max{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 1.989689042,
+    "rp1_ingest_ack_latency_seconds_sum{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 660.738978328,
+    "rp1_ingest_events_total{application=\"ingest-service\",result=\"valid\"}" : 24040.0,
+    "rp1_ingest_responses_total{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 1202.0,
+    "rp1_ingest_signature_total{application=\"ingest-service\",key=\"current\"}" : 1202.0,
+    "rp1_ingest_sync_batches_total{application=\"ingest-service\",late=\"false\"}" : 1202.0
+  }
+}

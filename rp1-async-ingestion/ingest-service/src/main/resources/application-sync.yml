@@ -7,7 +7,9 @@ spring:
     username: ${DB_USER:rp1}
     password: ${DB_PASSWORD:rp1}
     hikari:
-      maximum-pool-size: 210            # > Tomcat threads: the old system's limit was the downstream, not the pool
+      # Postgres max_connections is 100 (consumer pool + verifier need some). 60 connections x ~10ms per event txn
+      # is far above the downstream's 8 concurrent calls, so the downstream stays the bottleneck, as in the old system.
+      maximum-pool-size: 60
 
 rp1:
   ingest:
