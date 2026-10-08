@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 5s       # short runs (experiments are minutes long) need fine-grained samples
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: kafka-exporter
+    static_configs:
+      - targets: ['kafka-exporter:9308']
+
+  # Services run on the host (stages 2-3); targets are DOWN until then.
+  - job_name: ingest-service
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+
+  - job_name: consumer-service
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8081']

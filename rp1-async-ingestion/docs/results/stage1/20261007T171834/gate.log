@@ -1,0 +1,284 @@
+
+=== 17:18:34 setup (run=20261007T171834) ===
+ Container rp1-grafana-1  Stopping
+ Container rp1-toxiproxy-1  Stopping
+ Container rp1-postgres-1  Stopping
+ Container rp1-kafka-exporter-1  Stopping
+ Container rp1-kafka-exporter-1  Stopped
+ Container rp1-kafka-exporter-1  Removing
+ Container rp1-kafka-exporter-1  Removed
+ Container rp1-kafka-init-1  Stopping
+ Container rp1-kafka-init-1  Stopped
+ Container rp1-kafka-init-1  Removing
+ Container rp1-postgres-1  Stopped
+ Container rp1-postgres-1  Removing
+ Container rp1-kafka-init-1  Removed
+ Container rp1-kafka-1-1  Stopping
+ Container rp1-kafka-2-1  Stopping
+ Container rp1-kafka-3-1  Stopping
+ Container rp1-grafana-1  Stopped
+ Container rp1-grafana-1  Removing
+ Container rp1-postgres-1  Removed
+ Container rp1-grafana-1  Removed
+ Container rp1-prometheus-1  Stopping
+ Container rp1-toxiproxy-1  Stopped
+ Container rp1-toxiproxy-1  Removing
+ Container rp1-toxiproxy-1  Removed
+ Container rp1-prometheus-1  Stopped
+ Container rp1-prometheus-1  Removing
+ Container rp1-prometheus-1  Removed
+ Container rp1-kafka-3-1  Stopped
+ Container rp1-kafka-3-1  Removing
+ Container rp1-kafka-1-1  Stopped
+ Container rp1-kafka-1-1  Removing
+ Container rp1-kafka-3-1  Removed
+ Container rp1-kafka-1-1  Removed
+ Container rp1-kafka-2-1  Stopped
+ Container rp1-kafka-2-1  Removing
+ Container rp1-kafka-2-1  Removed
+ Volume rp1_pgdata  Removing
+ Network rp1_default  Removing
+ Volume rp1_pgdata  Removed
+ Network rp1_default  Removed
+ Network rp1_default  Creating
+ Network rp1_default  Created
+ Volume "rp1_pgdata"  Creating
+ Volume "rp1_pgdata"  Created
+ Container rp1-prometheus-1  Creating
+ Container rp1-kafka-1-1  Creating
+ Container rp1-kafka-2-1  Creating
+ Container rp1-kafka-3-1  Creating
+ Container rp1-postgres-1  Creating
+ Container rp1-toxiproxy-1  Creating
+ Container rp1-toxiproxy-1  Created
+ Container rp1-prometheus-1  Created
+ Container rp1-grafana-1  Creating
+ Container rp1-postgres-1  Created
+ Container rp1-kafka-2-1  Created
+ Container rp1-kafka-3-1  Created
+ Container rp1-kafka-1-1  Created
+ Container rp1-kafka-init-1  Creating
+ Container rp1-grafana-1  Created
+ Container rp1-kafka-init-1  Created
+ Container rp1-kafka-exporter-1  Creating
+ Container rp1-kafka-exporter-1  Created
+ Container rp1-kafka-2-1  Starting
+ Container rp1-prometheus-1  Starting
+ Container rp1-kafka-1-1  Starting
+ Container rp1-postgres-1  Starting
+ Container rp1-kafka-3-1  Starting
+ Container rp1-toxiproxy-1  Starting
+ Container rp1-kafka-3-1  Started
+ Container rp1-kafka-2-1  Started
+ Container rp1-prometheus-1  Started
+ Container rp1-prometheus-1  Waiting
+ Container rp1-kafka-1-1  Started
+ Container rp1-kafka-2-1  Waiting
+ Container rp1-kafka-3-1  Waiting
+ Container rp1-kafka-1-1  Waiting
+ Container rp1-toxiproxy-1  Started
+ Container rp1-postgres-1  Started
+ Container rp1-prometheus-1  Healthy
+ Container rp1-grafana-1  Starting
+ Container rp1-grafana-1  Started
+ Container rp1-kafka-2-1  Healthy
+ Container rp1-kafka-3-1  Healthy
+ Container rp1-kafka-1-1  Healthy
+ Container rp1-kafka-init-1  Starting
+ Container rp1-kafka-init-1  Started
+ Container rp1-kafka-init-1  Waiting
+ Container rp1-kafka-init-1  Exited
+ Container rp1-kafka-exporter-1  Starting
+ Container rp1-kafka-exporter-1  Started
+ Container rp1-toxiproxy-1  Waiting
+ Container rp1-prometheus-1  Waiting
+ Container rp1-kafka-exporter-1  Waiting
+ Container rp1-kafka-3-1  Waiting
+ Container rp1-postgres-1  Waiting
+ Container rp1-kafka-init-1  Waiting
+ Container rp1-kafka-2-1  Waiting
+ Container rp1-kafka-1-1  Waiting
+ Container rp1-grafana-1  Waiting
+ Container rp1-kafka-1-1  Healthy
+ Container rp1-kafka-3-1  Healthy
+ Container rp1-kafka-exporter-1  Healthy
+ Container rp1-kafka-init-1  Exited
+ Container rp1-kafka-2-1  Healthy
+ Container rp1-toxiproxy-1  Healthy
+ Container rp1-postgres-1  Healthy
+ Container rp1-prometheus-1  Healthy
+ Container rp1-grafana-1  Healthy
+Docker version 27.5.1, build 9f9e405
+2.32.4-desktop.1
+grafana	grafana/grafana:11.2.0	Up 16 seconds (healthy)
+kafka-1	apache/kafka:3.9.0	Up 22 seconds (healthy)
+kafka-2	apache/kafka:3.9.0	Up 22 seconds (healthy)
+kafka-3	apache/kafka:3.9.0	Up 22 seconds (healthy)
+kafka-exporter	danielqsj/kafka-exporter:v1.8.0	Up 4 seconds
+postgres	postgres:16.4-alpine	Up 22 seconds (healthy)
+prometheus	prom/prometheus:v2.54.1	Up 22 seconds (healthy)
+toxiproxy	ghcr.io/shopify/toxiproxy:2.9.0	Up 22 seconds (healthy)
+
+=== 17:19:13 1. topic + broker durability config ===
+Topic: callback-events	TopicId: GtxR8nZaQGm8v5aqDX5w9g	PartitionCount: 12	ReplicationFactor: 3	Configs: min.insync.replicas=2,retention.ms=604800000,unclean.leader.election.enable=false
+  -> PASS: callback-events      12p RF3 minISR2 unclean=false, all ISR=3
+Topic: callback-events-dlt	TopicId: Z5_lG-pfRe2fZTXPHGCRTQ	PartitionCount: 3	ReplicationFactor: 3	Configs: min.insync.replicas=2,retention.ms=1209600000,unclean.leader.election.enable=false
+  -> PASS: callback-events-dlt   3p RF3 minISR2 unclean=false, all ISR=3
+Topic: invalid-events	TopicId: 0qO-TGidQfCGxyBm7TiL2A	PartitionCount: 3	ReplicationFactor: 3	Configs: min.insync.replicas=2,retention.ms=1209600000,unclean.leader.election.enable=false
+  -> PASS: invalid-events        3p RF3 minISR2 unclean=false, all ISR=3
+Topic: stage1-gate	TopicId: 4IMtEPqpQPiFYh6n9bpnSA	PartitionCount: 12	ReplicationFactor: 3	Configs: min.insync.replicas=2,retention.ms=86400000,unclean.leader.election.enable=false
+  -> PASS: stage1-gate          12p RF3 minISR2 unclean=false, all ISR=3
+brokers 1-3: min.insync.replicas=2 default.replication.factor=3 unclean=false auto.create=false offsets RF=3
+  -> PASS: broker defaults on all 3 brokers
+
+=== 17:19:48 2. baseline: 1000 x acks=all via Toxiproxy, all brokers up ===
+[produce] phase=A-baseline topic=stage1-gate count=1000 rate=max expect=all-acked acks=all idempotence=true retries=2147483647 request.timeout.ms=10000 delivery.timeout.ms=60000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=A-baseline acked=1000 failed=0 elapsed=916ms ack-latency p50=271.6ms p99=285.5ms max=548.4ms
+[produce]   last-ack-epoch-ms=1791418789929
+[produce] phase=A-baseline expect=all-acked -> PASS
+  -> PASS: baseline all acked
+
+=== 17:19:49 3. prove client traffic flows through Toxiproxy ===
+[produce] phase=B-latency300 topic=stage1-gate count=50 rate=max expect=all-acked acks=all idempotence=true retries=2147483647 request.timeout.ms=10000 delivery.timeout.ms=60000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=B-latency300 acked=50 failed=0 elapsed=1748ms ack-latency p50=635.8ms p99=1496.0ms max=1496.0ms
+[produce]   last-ack-epoch-ms=1791418791864
+[produce] phase=B-latency300 expect=all-acked -> PASS
+p50=635ms (expect >= 300ms injected)
+  -> PASS: 300ms latency toxic shows up in ack latency
+[produce] phase=C-proxies-down topic=stage1-gate count=5 rate=max expect=all-failed acks=all idempotence=true retries=2147483647 request.timeout.ms=2000 delivery.timeout.ms=5000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=C-proxies-down acked=0 failed=5 elapsed=15292ms ack-latency p50=3004.3ms p99=3005.8ms max=3005.8ms
+[produce]   error x5  TimeoutException: Topic stage1-gate not present in metadata after 3000 ms.
+[produce] phase=C-proxies-down expect=all-failed -> PASS
+  -> PASS: all proxies disabled -> every send fails (no bypass path)
+
+=== 17:20:07 4. SIGKILL kafka-2 while producing 6000 msgs at 600/s ===
+17:20:10 kill-epoch-ms=1791418810574 docker kill -s SIGKILL kafka-2
+ Container rp1-kafka-2-1  Killing
+ Container rp1-kafka-2-1  Killed
+[produce] phase=D-kill-mid-run topic=stage1-gate count=6000 rate=600/s expect=all-acked acks=all idempotence=true retries=2147483647 request.timeout.ms=10000 delivery.timeout.ms=60000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=D-kill-mid-run acked=6000 failed=0 elapsed=15946ms ack-latency p50=100.9ms p99=9520.8ms max=9702.5ms
+[produce]   last-ack-epoch-ms=1791418823697
+[produce] phase=D-kill-mid-run expect=all-acked -> PASS
+  -> PASS: broker killed mid-run: every acks=all send still acked
+
+=== 17:20:23 4b. cluster state with kafka-2 down ===
+	Topic: stage1-gate	Partition: 0	Leader: 1	Replicas: 1,2,3	Isr: 1,3	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 1	Leader: 3	Replicas: 2,3,1	Isr: 3,1	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 2	Leader: 3	Replicas: 3,1,2	Isr: 3,1	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 3	Leader: 3	Replicas: 3,1,2	Isr: 3,1	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 4	Leader: 1	Replicas: 1,2,3	Isr: 1,3	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 5	Leader: 3	Replicas: 2,3,1	Isr: 3,1	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 6	Leader: 3	Replicas: 2,3,1	Isr: 3,1	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 7	Leader: 3	Replicas: 3,1,2	Isr: 3,1	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 8	Leader: 1	Replicas: 1,2,3	Isr: 1,3	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 9	Leader: 3	Replicas: 3,1,2	Isr: 3,1	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 10	Leader: 1	Replicas: 1,2,3	Isr: 1,3	Elr: 	LastKnownElr: 
+	Topic: stage1-gate	Partition: 11	Leader: 3	Replicas: 2,3,1	Isr: 3,1	Elr: 	LastKnownElr: 
+  -> PASS: kafka-2 fenced: no partition led by it, removed from every ISR
+
+=== 17:20:35 5. steady state with 1 of 3 brokers down: 1000 x acks=all ===
+[produce] phase=E-degraded topic=stage1-gate count=1000 rate=max expect=all-acked acks=all idempotence=true retries=2147483647 request.timeout.ms=10000 delivery.timeout.ms=60000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=E-degraded acked=1000 failed=0 elapsed=845ms ack-latency p50=22.8ms p99=42.4ms max=348.3ms
+[produce]   last-ack-epoch-ms=1791418836324
+[produce] phase=E-degraded expect=all-acked -> PASS
+  -> PASS: degraded cluster (2/3) still accepts acks=all
+
+=== 17:20:36 6. min ISR is enforced: topic with min.insync.replicas=3, one broker down ===
+[produce] phase=F-minisr3 topic=stage1-gate-minisr3 count=20 rate=max expect=all-failed acks=all idempotence=false retries=0 request.timeout.ms=3000 delivery.timeout.ms=5000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=F-minisr3 acked=0 failed=20 elapsed=477ms ack-latency p50=27.7ms p99=228.7ms max=228.7ms
+[produce]   error x20  NotEnoughReplicasException: Messages are rejected since there are fewer in-sync replicas than required.
+[produce] phase=F-minisr3 expect=all-failed -> PASS
+  -> PASS: acks=all rejected with NotEnoughReplicas when ISR < min ISR
+
+=== 17:20:36 7. warm producer running, SIGKILL kafka-3 too (1 of 3 alive, KRaft quorum lost): no ack after the kill ===
+17:20:40 kill-epoch-ms=1791418839998 docker kill -s SIGKILL kafka-3
+ Container rp1-kafka-3-1  Killing
+ Container rp1-kafka-3-1  Killed
+[produce] phase=G-two-down-warm topic=stage1-gate count=2000 rate=100/s expect=any acks=all idempotence=true retries=2147483647 request.timeout.ms=3000 delivery.timeout.ms=10000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=G-two-down-warm acked=613 failed=1387 elapsed=30876ms ack-latency p50=4122.2ms p99=9999.9ms max=10002.4ms
+[produce]   last-ack-epoch-ms=1791418843180
+[produce]   error x20  TimeoutException: Expiring 20 record(s) for stage1-gate-8:10000 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-10:10000 ms has passed since batch creation
+[produce]   error x33  TimeoutException: Expiring 33 record(s) for stage1-gate-0:10000 ms has passed since batch creation
+[produce]   error x22  TimeoutException: Expiring 22 record(s) for stage1-gate-2:10001 ms has passed since batch creation
+[produce]   error x15  TimeoutException: Expiring 15 record(s) for stage1-gate-10:10000 ms has passed since batch creation
+[produce]   error x2  TimeoutException: Expiring 1 record(s) for stage1-gate-0:10000 ms has passed since batch creation
+[produce]   error x5  TimeoutException: Expiring 5 record(s) for stage1-gate-1:10000 ms has passed since batch creation
+[produce]   error x16  TimeoutException: Expiring 16 record(s) for stage1-gate-1:10000 ms has passed since batch creation
+[produce]   error x36  TimeoutException: Expiring 36 record(s) for stage1-gate-7:10001 ms has passed since batch creation
+[produce]   error x23  TimeoutException: Expiring 23 record(s) for stage1-gate-0:10001 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-6:10000 ms has passed since batch creation
+[produce]   error x34  TimeoutException: Expiring 34 record(s) for stage1-gate-4:10001 ms has passed since batch creation
+[produce]   error x34  TimeoutException: Expiring 34 record(s) for stage1-gate-11:10001 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-3:10000 ms has passed since batch creation
+[produce]   error x3  TimeoutException: Expiring 1 record(s) for stage1-gate-4:10000 ms has passed since batch creation
+[produce]   error x34  TimeoutException: Expiring 34 record(s) for stage1-gate-6:10001 ms has passed since batch creation
+[produce]   error x111  TimeoutException: Expiring 111 record(s) for stage1-gate-5:10000 ms has passed since batch creation
+[produce]   error x48  TimeoutException: Expiring 48 record(s) for stage1-gate-3:10000 ms has passed since batch creation
+[produce]   error x48  TimeoutException: Expiring 48 record(s) for stage1-gate-8:10000 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-5:10000 ms has passed since batch creation
+[produce]   error x35  TimeoutException: Expiring 35 record(s) for stage1-gate-10:10000 ms has passed since batch creation
+[produce]   error x42  TimeoutException: Expiring 42 record(s) for stage1-gate-5:10001 ms has passed since batch creation
+[produce]   error x95  TimeoutException: Expiring 95 record(s) for stage1-gate-7:10000 ms has passed since batch creation
+[produce]   error x96  TimeoutException: Expiring 96 record(s) for stage1-gate-11:10000 ms has passed since batch creation
+[produce]   error x95  TimeoutException: Expiring 95 record(s) for stage1-gate-6:10000 ms has passed since batch creation
+[produce]   error x19  TimeoutException: Expiring 19 record(s) for stage1-gate-8:10000 ms has passed since batch creation
+[produce]   error x17  TimeoutException: Expiring 17 record(s) for stage1-gate-9:10002 ms has passed since batch creation
+[produce]   error x13  TimeoutException: Expiring 13 record(s) for stage1-gate-10:10000 ms has passed since batch creation
+[produce]   error x63  TimeoutException: Expiring 63 record(s) for stage1-gate-2:10000 ms has passed since batch creation
+[produce]   error x157  TimeoutException: Expiring 157 record(s) for stage1-gate-0:10000 ms has passed since batch creation
+[produce]   error x93  TimeoutException: Expiring 93 record(s) for stage1-gate-4:10000 ms has passed since batch creation
+[produce]   error x48  TimeoutException: Expiring 48 record(s) for stage1-gate-9:10000 ms has passed since batch creation
+[produce]   error x126  TimeoutException: Expiring 126 record(s) for stage1-gate-3:10000 ms has passed since batch creation
+[produce] phase=G-two-down-warm expect=any -> PASS
+last ack 3182ms relative to kill (allow <= +1000ms for in-flight responses), failed after kill=1387
+  -> FAIL: only 1 replica alive -> nothing acked after the kill, sends fail within delivery.timeout
+
+=== 17:21:08 7b. cold idempotent producer while quorum is lost (bounded by app-side deadline) ===
+[produce] phase=H-two-down-cold topic=stage1-gate count=20 rate=max expect=all-failed acks=all idempotence=true retries=2147483647 request.timeout.ms=3000 delivery.timeout.ms=10000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=H-two-down-cold acked=0 failed=20 elapsed=13964ms ack-latency p50=10007.2ms p99=10739.0ms max=10739.0ms
+[produce]   error x3  TimeoutException: Expiring 3 record(s) for stage1-gate-11:10007 ms has passed since batch creation
+[produce]   error x2  TimeoutException: Expiring 2 record(s) for stage1-gate-2:10006 ms has passed since batch creation
+[produce]   error x2  TimeoutException: Expiring 2 record(s) for stage1-gate-4:10006 ms has passed since batch creation
+[produce]   error x2  TimeoutException: Expiring 2 record(s) for stage1-gate-5:10007 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-9:10006 ms has passed since batch creation
+[produce]   error x3  TimeoutException: Expiring 3 record(s) for stage1-gate-0:10002 ms has passed since batch creation
+[produce]   error x3  TimeoutException: Expiring 3 record(s) for stage1-gate-3:10007 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-6:10006 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-8:10007 ms has passed since batch creation
+[produce]   error x2  TimeoutException: Expiring 2 record(s) for stage1-gate-7:10007 ms has passed since batch creation
+[produce] phase=H-two-down-cold expect=all-failed -> PASS
+  -> PASS: cold producer: no write acked (app deadline 15s enforces the bound)
+
+=== 17:21:22 8. restart kafka-2 and kafka-3, wait for full ISR ===
+ Container rp1-kafka-2-1  Starting
+ Container rp1-kafka-3-1  Starting
+ Container rp1-kafka-2-1  Started
+ Container rp1-kafka-3-1  Started
+full ISR after ~2s
+  -> PASS: all stage1-gate partitions back to ISR=3
+
+=== 17:21:50 9. verify log against ledgers ===
+[verify] topic=stage1-gate run=20261007T171834 ledger: acked=8663 failed=1412 | log: distinct=8846 duplicate-ids=0
+[verify] acked-but-missing (LOSS)=0   failed-but-present (ambiguous failure, retry would duplicate)=183
+[verify] zero loss of acked writes -> PASS
+  -> PASS: zero loss: every acked id is in the log
+
+=== 17:21:51 summary ===
+PASS  callback-events      12p RF3 minISR2 unclean=false, all ISR=3
+PASS  callback-events-dlt   3p RF3 minISR2 unclean=false, all ISR=3
+PASS  invalid-events        3p RF3 minISR2 unclean=false, all ISR=3
+PASS  stage1-gate          12p RF3 minISR2 unclean=false, all ISR=3
+PASS  broker defaults on all 3 brokers
+PASS  baseline all acked
+PASS  300ms latency toxic shows up in ack latency
+PASS  all proxies disabled -> every send fails (no bypass path)
+PASS  broker killed mid-run: every acks=all send still acked
+PASS  kafka-2 fenced: no partition led by it, removed from every ISR
+PASS  degraded cluster (2/3) still accepts acks=all
+PASS  acks=all rejected with NotEnoughReplicas when ISR < min ISR
+FAIL  only 1 replica alive -> nothing acked after the kill, sends fail within delivery.timeout
+PASS  cold producer: no write acked (app deadline 15s enforces the bound)
+PASS  all stage1-gate partitions back to ISR=3
+PASS  zero loss: every acked id is in the log
+passed=15 failed=1  log=/Users/asudheer/Documents/Programming/Resume Points 10-2026/rp1-async-ingestion/docs/results/stage1/20261007T171834/gate.log

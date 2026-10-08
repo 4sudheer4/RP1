@@ -1,0 +1,6 @@
+[
+  { "name": "kafka-1",  "listen": "0.0.0.0:39092", "upstream": "kafka-1:9092",   "enabled": true },
+  { "name": "kafka-2",  "listen": "0.0.0.0:39093", "upstream": "kafka-2:9092",   "enabled": true },
+  { "name": "kafka-3",  "listen": "0.0.0.0:39094", "upstream": "kafka-3:9092",   "enabled": true },
+  { "name": "postgres", "listen": "0.0.0.0:55432", "upstream": "postgres:5432",  "enabled": true }
+]
