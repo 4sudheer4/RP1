@@ -1,0 +1,37 @@
+[produce] phase=G-two-down-warm topic=stage1-gate count=2000 rate=100/s expect=any acks=all idempotence=true retries=2147483647 request.timeout.ms=3000 delivery.timeout.ms=10000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=G-two-down-warm acked=613 failed=1387 elapsed=30876ms ack-latency p50=4122.2ms p99=9999.9ms max=10002.4ms
+[produce]   last-ack-epoch-ms=1791418843180
+[produce]   error x20  TimeoutException: Expiring 20 record(s) for stage1-gate-8:10000 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-10:10000 ms has passed since batch creation
+[produce]   error x33  TimeoutException: Expiring 33 record(s) for stage1-gate-0:10000 ms has passed since batch creation
+[produce]   error x22  TimeoutException: Expiring 22 record(s) for stage1-gate-2:10001 ms has passed since batch creation
+[produce]   error x15  TimeoutException: Expiring 15 record(s) for stage1-gate-10:10000 ms has passed since batch creation
+[produce]   error x2  TimeoutException: Expiring 1 record(s) for stage1-gate-0:10000 ms has passed since batch creation
+[produce]   error x5  TimeoutException: Expiring 5 record(s) for stage1-gate-1:10000 ms has passed since batch creation
+[produce]   error x16  TimeoutException: Expiring 16 record(s) for stage1-gate-1:10000 ms has passed since batch creation
+[produce]   error x36  TimeoutException: Expiring 36 record(s) for stage1-gate-7:10001 ms has passed since batch creation
+[produce]   error x23  TimeoutException: Expiring 23 record(s) for stage1-gate-0:10001 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-6:10000 ms has passed since batch creation
+[produce]   error x34  TimeoutException: Expiring 34 record(s) for stage1-gate-4:10001 ms has passed since batch creation
+[produce]   error x34  TimeoutException: Expiring 34 record(s) for stage1-gate-11:10001 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-3:10000 ms has passed since batch creation
+[produce]   error x3  TimeoutException: Expiring 1 record(s) for stage1-gate-4:10000 ms has passed since batch creation
+[produce]   error x34  TimeoutException: Expiring 34 record(s) for stage1-gate-6:10001 ms has passed since batch creation
+[produce]   error x111  TimeoutException: Expiring 111 record(s) for stage1-gate-5:10000 ms has passed since batch creation
+[produce]   error x48  TimeoutException: Expiring 48 record(s) for stage1-gate-3:10000 ms has passed since batch creation
+[produce]   error x48  TimeoutException: Expiring 48 record(s) for stage1-gate-8:10000 ms has passed since batch creation
+[produce]   error x1  TimeoutException: Expiring 1 record(s) for stage1-gate-5:10000 ms has passed since batch creation
+[produce]   error x35  TimeoutException: Expiring 35 record(s) for stage1-gate-10:10000 ms has passed since batch creation
+[produce]   error x42  TimeoutException: Expiring 42 record(s) for stage1-gate-5:10001 ms has passed since batch creation
+[produce]   error x95  TimeoutException: Expiring 95 record(s) for stage1-gate-7:10000 ms has passed since batch creation
+[produce]   error x96  TimeoutException: Expiring 96 record(s) for stage1-gate-11:10000 ms has passed since batch creation
+[produce]   error x95  TimeoutException: Expiring 95 record(s) for stage1-gate-6:10000 ms has passed since batch creation
+[produce]   error x19  TimeoutException: Expiring 19 record(s) for stage1-gate-8:10000 ms has passed since batch creation
+[produce]   error x17  TimeoutException: Expiring 17 record(s) for stage1-gate-9:10002 ms has passed since batch creation
+[produce]   error x13  TimeoutException: Expiring 13 record(s) for stage1-gate-10:10000 ms has passed since batch creation
+[produce]   error x63  TimeoutException: Expiring 63 record(s) for stage1-gate-2:10000 ms has passed since batch creation
+[produce]   error x157  TimeoutException: Expiring 157 record(s) for stage1-gate-0:10000 ms has passed since batch creation
+[produce]   error x93  TimeoutException: Expiring 93 record(s) for stage1-gate-4:10000 ms has passed since batch creation
+[produce]   error x48  TimeoutException: Expiring 48 record(s) for stage1-gate-9:10000 ms has passed since batch creation
+[produce]   error x126  TimeoutException: Expiring 126 record(s) for stage1-gate-3:10000 ms has passed since batch creation
+[produce] phase=G-two-down-warm expect=any -> PASS

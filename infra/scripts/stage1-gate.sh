@@ -7,6 +7,9 @@
 # Output: docs/results/stage1/<run>/gate.log (ledgers alongside, gitignored). Exit 0 only if every check passes.
 set -uo pipefail
 
+# Timing checks are meaningless if the laptop idle-sleeps mid-run (it did, on battery). Hold a no-sleep assertion.
+if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
+
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 INFRA=$ROOT/infra
 RUN=$(date +%Y%m%dT%H%M%S)
@@ -30,7 +33,7 @@ check() {  # name, then command; records PASS/FAIL
   else FAIL=$((FAIL+1)); RESULTS+=("FAIL  $name"); echo "  -> FAIL: $name"; fi
 }
 step() { echo; echo "=== $(date +%H:%M:%S) $* ==="; }
-now_ms() { perl -MTime::HiRes=time -e 'printf "%d\n", time*1000'; }
+died_ms() { python3 -c 'import sys,datetime;s=sys.argv[1];print(int(datetime.datetime.fromisoformat(s[:26]+"+00:00").timestamp()*1000))' "$(docker inspect -f '{{.State.FinishedAt}}' "$(dc ps -aq "$1")")"; }
 
 # ------------------------------------------------------------------ setup
 step "setup (run=$RUN)"
@@ -99,7 +102,7 @@ step "4. SIGKILL kafka-2 while producing 6000 msgs at 600/s"
 gate produce --topic stage1-gate --run "$RUN" --phase D-kill-mid-run --count 6000 --rate 600 --ledger "$LEDGER" > "$OUT/phase-D.out" 2>&1 &
 PID=$!
 sleep 3
-echo "$(date +%H:%M:%S) kill-epoch-ms=$(now_ms) docker kill -s SIGKILL kafka-2"; dc kill -s SIGKILL kafka-2
+echo "$(date +%H:%M:%S) docker kill -s SIGKILL kafka-2"; dc kill -s SIGKILL kafka-2; echo "kafka-2 exited at epoch-ms=$(died_ms kafka-2) (docker State.FinishedAt)"
 wait $PID; RC=$?
 cat "$OUT/phase-D.out"
 check "broker killed mid-run: every acks=all send still acked" test $RC -eq 0
@@ -132,13 +135,16 @@ gate produce --topic stage1-gate --run "$RUN" --phase G-two-down-warm --count 20
      --ledger "$LEDGER" > "$OUT/phase-G.out" 2>&1 &
 PID=$!
 sleep 3
-KILL_MS=$(now_ms); echo "$(date +%H:%M:%S) kill-epoch-ms=$KILL_MS docker kill -s SIGKILL kafka-3"; dc kill -s SIGKILL kafka-3
+echo "$(date +%H:%M:%S) docker kill -s SIGKILL kafka-3"; dc kill -s SIGKILL kafka-3
 wait $PID; RC=$?
 cat "$OUT/phase-G.out"
+# The compose CLI takes seconds to start here, so a timestamp taken around the command is not the kill time.
+# Docker's recorded container exit time is.
+KILL_MS=$(died_ms kafka-3); echo "kafka-3 exited at epoch-ms=$KILL_MS (docker State.FinishedAt)"
 no_ack_after_kill() {
   local last; last=$(sed -nE 's/.*last-ack-epoch-ms=([0-9]+).*/\1/p' "$OUT/phase-G.out")
   local failed; failed=$(sed -nE 's/.*acked=[0-9]+ failed=([0-9]+).*/\1/p' "$OUT/phase-G.out")
-  echo "last ack $(( ${last:-0} - KILL_MS ))ms relative to kill (allow <= +1000ms for in-flight responses), failed after kill=$failed"
+  echo "last ack $(( ${last:-0} - KILL_MS ))ms relative to kafka-3 exit (allow <= +1000ms for in-flight responses), failed=$failed"
   [[ $RC -eq 0 && ${last:-0} -le $((KILL_MS + 1000)) && ${failed:-0} -gt 0 ]]
 }
 check "only 1 replica alive -> nothing acked after the kill, sends fail within delivery.timeout" no_ack_after_kill

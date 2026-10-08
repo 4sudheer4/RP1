@@ -1,0 +1,4 @@
+[produce] phase=D-kill-mid-run topic=stage1-gate count=6000 rate=600/s expect=all-acked acks=all idempotence=true retries=2147483647 request.timeout.ms=10000 delivery.timeout.ms=60000 bootstrap=localhost:39092,localhost:39093,localhost:39094
+[produce] phase=D-kill-mid-run acked=6000 failed=0 elapsed=15946ms ack-latency p50=100.9ms p99=9520.8ms max=9702.5ms
+[produce]   last-ack-epoch-ms=1791418823697
+[produce] phase=D-kill-mid-run expect=all-acked -> PASS
