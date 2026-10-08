@@ -1,0 +1,4 @@
+# Stage 3 gate: mvn -pl consumer-service verify (Thu Oct  8 14:30:51 PDT 2026)
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 38.44 s -- in com.rp1.consumer.it.ConsumerIT
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 60.44 s -- in com.rp1.consumer.it.ConsumerKillIT
+kill -9 IT: events=2000 rowsAtKill=408 finalRows=2000 bounced=1000/1000 downstreamRepeated=0

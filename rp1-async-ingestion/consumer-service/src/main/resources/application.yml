@@ -1,0 +1,81 @@
+spring:
+  application:
+    name: consumer-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:55432/rp1}   # via Toxiproxy, so DB-slowness experiments can hit it
+    username: ${DB_USER:rp1}
+    password: ${DB_PASSWORD:rp1}
+    hikari:
+      # main (concurrency) + 3 retry topics x 2 + DLT x 2 listener threads, each may also take a second
+      # connection for downstream_call (REQUIRES_NEW). 32 covers concurrency up to 6 with headroom.
+      maximum-pool-size: 32
+      connection-timeout: 3000          # fail (-> retryable) fast instead of the 30s default
+  lifecycle:
+    timeout-per-shutdown-phase: 30s     # let the in-flight poll finish and commit before exit
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:39092,localhost:39093,localhost:39094}  # via Toxiproxy
+    consumer:
+      group-id: ${CONSUMER_GROUP:rp1-consumer}
+      client-id: consumer-${HOSTNAME:local}
+      auto-offset-reset: earliest       # a new group must not skip events that are already in the topic
+      enable-auto-commit: false         # offsets commit only after the sink txn (container-managed)
+      max-poll-records: 50              # worst case 50 x (1s downstream wait + 1s rate wait + DB) << max.poll.interval
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: com.rp1.consumer.infra.EnvelopeDeserializer
+        partition.assignment.strategy: org.apache.kafka.clients.consumer.CooperativeStickyAssignor  # incremental rebalances: unaffected partitions keep flowing
+        session.timeout.ms: 10000       # detect a dead consumer in ~10s (default 45s) -> faster redelivery after kill -9
+        heartbeat.interval.ms: 3000     # <= session/3
+        max.poll.interval.ms: 300000    # default; per-poll work is capped by max-poll-records (see above)
+    producer:                           # used to publish to retry topics and the DLT
+      acks: all
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: com.rp1.consumer.infra.PassThroughSerializer
+      properties:
+        enable.idempotence: true
+        delivery.timeout.ms: 30000      # no client deadline here; a failed DLT publish fails the record (redelivered)
+    listener:
+      ack-mode: batch                   # commit after every record of the poll is processed (or recovered)
+      observation-enabled: false
+
+server:
+  port: ${PORT:8081}
+  shutdown: graceful
+
+rp1:
+  consumer:
+    concurrency: 3                      # 12 partitions / 3 = 4 each; scale out with more instances (max 12 threads total)
+    max-rps: 0                          # 0 = no client-side limit
+    retry:
+      attempts: 4                       # 1 try + 3 retry topics
+      initial-backoff: 1s
+      multiplier: 2.0
+      max-backoff: 8s
+    throttle:
+      initial-pause: 500ms
+      max-pause: 15s
+  downstream:
+    capacity: ${DOWNSTREAM_CAPACITY:8}
+    service-time: ${DOWNSTREAM_SERVICE_TIME:2ms}
+    acquire-timeout: 1s                 # a saturated downstream surfaces as a 429 (retry topic + pause), not a hang
+    transient-failure-rate: ${DOWNSTREAM_FAILURE_RATE:0}
+    fault-markers: ${DOWNSTREAM_FAULT_MARKERS:false}
+    record-calls: ${DOWNSTREAM_RECORD_CALLS:false}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  level:
+    org.apache.kafka: WARN

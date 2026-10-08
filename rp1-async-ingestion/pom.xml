@@ -19,8 +19,8 @@
     <module>testkit</module>
     <module>sink</module>
     <module>ingest-service</module>
-    <!--module>consumer-service</module-->
-    <!--module>loadgen</module-->
+    <module>consumer-service</module>
+    <module>loadgen</module>
   </modules>
 
   <properties>

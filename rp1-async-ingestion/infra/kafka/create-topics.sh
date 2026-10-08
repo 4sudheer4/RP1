@@ -38,5 +38,6 @@ create stage1-gate            12 1
   --config retention.ms=$DAY_MS
 echo "ok: stage1-gate-minisr3"
 
-# Retry topics (callback-events-retry-*) are created by the consumer in stage 3 once the backoff
-# schedule is fixed; auto-create is off, so they must be declared with RF=3 there.
+# Non-blocking retry topics (consumer: 4 attempts = 1 try + 3 retries, backoff 1s/2s/4s +jitter, max 8s).
+# Same partition count as the main topic so Spring's recoverer can keep the original partition number.
+for i in 0 1 2; do create "callback-events-retry-$i" 12 7; done
