@@ -2,6 +2,9 @@ global:
   scrape_interval: 5s       # short runs (experiments are minutes long) need fine-grained samples
   evaluation_interval: 5s
 
+rule_files:
+  - /etc/prometheus/alerts.yml
+
 scrape_configs:
   - job_name: prometheus
     static_configs:
@@ -11,7 +14,8 @@ scrape_configs:
     static_configs:
       - targets: ['kafka-exporter:9308']
 
-  # Services run on the host (stages 2-3); targets are DOWN until then.
+  # Services run on the host as processes; targets are DOWN when not running. Experiments start up to
+  # four consumer instances on 8081-8084.
   - job_name: ingest-service
     metrics_path: /actuator/prometheus
     static_configs:
@@ -20,4 +24,4 @@ scrape_configs:
   - job_name: consumer-service
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ['host.docker.internal:8081']
+      - targets: ['host.docker.internal:8081', 'host.docker.internal:8082', 'host.docker.internal:8083', 'host.docker.internal:8084']

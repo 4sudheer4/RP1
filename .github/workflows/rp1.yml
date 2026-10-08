@@ -1,0 +1,61 @@
+# RP1 CI: unit + Testcontainers integration tests, config lint.
+# Cost: GitHub-hosted runners are free for public repositories; no secrets, no paid services, no registries.
+name: rp1
+
+on:
+  push:
+    branches: [main]
+    paths: ["rp1-async-ingestion/**", ".github/workflows/rp1.yml"]
+  pull_request:
+    paths: ["rp1-async-ingestion/**", ".github/workflows/rp1.yml"]
+
+concurrency:
+  group: rp1-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: rp1-async-ingestion
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      # verify = unit tests (surefire) + package + integration tests (failsafe, Docker via Testcontainers:
+      # Kafka behind Toxiproxy, Postgres, kill -9 of the packaged consumer jar).
+      - name: mvn verify
+        run: mvn -B -ntp verify
+      - name: test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            rp1-async-ingestion/**/target/surefire-reports/*.txt
+            rp1-async-ingestion/**/target/failsafe-reports/*.txt
+            rp1-async-ingestion/consumer-service/target/kill-it/
+          retention-days: 7
+
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: prometheus rules
+        run: docker run --rm -v "$PWD/infra/prometheus:/p:ro" --entrypoint /bin/promtool prom/prometheus:v2.54.1 check rules /p/alerts.yml
+      - name: compose config
+        run: docker compose -f infra/docker-compose.yml config -q
+      - name: shell syntax
+        run: for f in infra/scripts/*.sh infra/experiments/*.sh infra/kafka/*.sh; do bash -n "$f"; done
+      - name: dashboard json
+        run: python3 -m json.tool infra/grafana/dashboards/rp1-overview.json > /dev/null

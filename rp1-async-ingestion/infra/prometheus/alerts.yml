@@ -1,0 +1,146 @@
+# RP1 alert rules. Thresholds are starting points sized to the SFMC ENS contract (2s per batch, 3 retries, then
+# drop; repeated failures suspend the callback) and to the drain budget in docs/ARCHITECTURE.md.
+groups:
+  - name: rp1-ingest
+    rules:
+      - alert: IngestServiceDown
+        expr: up{job=~"ingest-service"} == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: "ingest instance {{ $labels.instance }} not scrapeable"
+
+      # SFMC retries 5xx 3 times then drops the batch; sustained 5xx also gets the callback suspended.
+      - alert: IngestErrorRatioHigh
+        expr: |
+          sum(rate(rp1_ingest_responses_total{status=~"5.."}[2m]))
+            / clamp_min(sum(rate(rp1_ingest_responses_total[2m])), 1e-9) > 0.05
+        for: 2m
+        labels: {severity: critical}
+        annotations:
+          summary: "ingest 5xx ratio {{ $value | humanizePercentage }} (SFMC will retry, then drop/suspend)"
+          runbook: "Check rp1_ingest_responses_total by cause: breaker_open/produce_timeout = Kafka; bulkhead_full = capacity"
+
+      # Handler deadline is 1.5s; SFMC gives up at 2s. p99 over 1s leaves no headroom.
+      - alert: IngestAckLatencyP99High
+        expr: |
+          histogram_quantile(0.99, sum by (le) (rate(rp1_ingest_ack_latency_seconds_bucket{status="200"}[5m]))) > 1
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "ingest 200-ack p99 {{ $value | humanizeDuration }} (deadline 1.5s, SFMC timeout 2s)"
+
+      - alert: IngestProduceBreakerOpen
+        expr: max(rp1_ingest_breaker_state) == 1
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: "Kafka produce circuit breaker open: every callback gets a fast 503"
+
+      - alert: IngestBulkheadShedding
+        expr: sum(rate(rp1_ingest_responses_total{cause="bulkhead_full"}[5m])) > 0
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "ingest shedding load (bulkhead full): scale out ingest"
+
+      # Per-event validation failures are routed, not rejected; someone must look at them.
+      - alert: IngestInvalidEvents
+        expr: sum(increase(rp1_ingest_events_total{result="invalid"}[15m])) > 0
+        labels: {severity: warning}
+        annotations:
+          summary: "{{ $value }} invalid events routed to invalid-events in 15m (by reason: rp1_ingest_events_total)"
+
+      - alert: IngestSignatureFailures
+        expr: sum(rate(rp1_ingest_responses_total{cause=~"bad_signature|missing_signature"}[5m])) > 0.1
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "callbacks failing signature verification (key rotated at SFMC but not here? or abuse)"
+
+      - alert: IngestSignatureKeyRotationIncomplete
+        expr: sum(increase(rp1_ingest_signature_total{key="previous"}[1h])) > 0
+        for: 24h
+        labels: {severity: info}
+        annotations:
+          summary: "callbacks still signed with the previous key 24h after rotation"
+
+      - alert: IngestClockSkewedEvents
+        expr: sum(increase(rp1_ingest_clock_skewed_events_total[15m])) > 0
+        labels: {severity: info}
+        annotations:
+          summary: "events with upstream timestamps beyond max skew (clamped for ordering)"
+
+  - name: rp1-consumer
+    rules:
+      - alert: ConsumerServiceDown
+        expr: up{job=~"consumer-service"} == 0
+        for: 2m
+        labels: {severity: warning}
+        annotations:
+          summary: "consumer instance {{ $labels.instance }} not scrapeable"
+
+      # Lag in records alone is ambiguous; pair it with age.
+      - alert: ConsumerLagHigh
+        expr: sum(kafka_consumergroup_lag{consumergroup="rp1-consumer", topic="callback-events"}) > 50000
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "consumer lag {{ $value }} records on callback-events"
+
+      - alert: ConsumerOldestUnprocessedAgeHigh
+        expr: max(rp1_consumer_oldest_unprocessed_age_seconds{topic="callback-events"}) > 300
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "oldest unprocessed callback is {{ $value | humanizeDuration }} old"
+      - alert: ConsumerOldestUnprocessedAgeCritical
+        expr: max(rp1_consumer_oldest_unprocessed_age_seconds{topic="callback-events"}) > 3600
+        for: 5m
+        labels: {severity: critical}
+        annotations:
+          summary: "oldest unprocessed callback {{ $value | humanizeDuration }} old: drain budget exceeded"
+
+      - alert: DeadLetterRecordsArriving
+        expr: sum(increase(kafka_topic_partition_current_offset{topic="callback-events-dlt"}[10m])) > 0
+        labels: {severity: warning}
+        annotations:
+          summary: "{{ $value }} records dead-lettered in 10m: triage, fix, then replay (loadgen dlq-replay)"
+
+      - alert: RetryTopicTrafficHigh
+        expr: sum(rate(kafka_topic_partition_current_offset{topic=~"callback-events-retry-.*"}[5m])) > 10
+        for: 10m
+        labels: {severity: warning}
+        annotations:
+          summary: "sustained retries ({{ $value }}/s): downstream degraded"
+
+      - alert: DownstreamThrottling
+        expr: sum(rate(rp1_consumer_throttle_pauses_total[5m])) > 0
+        for: 10m
+        labels: {severity: warning}
+        annotations:
+          summary: "consumer repeatedly paused on downstream 429s"
+
+  - name: rp1-kafka
+    rules:
+      - alert: KafkaBrokerMissing
+        expr: kafka_brokers < 3
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: "only {{ $value }} of 3 brokers registered: one more loss stops acks=all writes"
+
+      - alert: KafkaUnderReplicatedPartitions
+        expr: sum(kafka_topic_partition_under_replicated_partition) > 0
+        for: 2m
+        labels: {severity: warning}
+        annotations:
+          summary: "{{ $value }} under-replicated partitions"
+
+      # Below min.insync.replicas=2, acks=all produce fails -> ingest returns 503 for those partitions.
+      - alert: KafkaUnderMinIsr
+        expr: count(kafka_topic_partition_in_sync_replica{topic=~"callback-events.*|invalid-events"} < 2) > 0
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: "{{ $value }} partitions below min ISR 2: ingest cannot ack events for them"
