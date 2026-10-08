@@ -1,0 +1,22 @@
+{
+  "runId" : "rmv03pvsx",
+  "eventsGenerated" : 96000,
+  "validEvents" : 96000,
+  "invalidEventsGenerated" : 0,
+  "poisonEvents" : 0,
+  "persistedDistinct" : 79220,
+  "duplicateRows" : 0,
+  "missing" : 16780,
+  "missingButInDlt" : 0,
+  "lostUnaccounted" : 16780,
+  "eventCapture" : 0.825208,
+  "eventCaptureExcludingPoison" : 0.825208,
+  "dltRecordsForRun" : 0,
+  "invalidRoutedToTopic" : 0,
+  "invalidRecordedSyncMode" : 0,
+  "messagesFullyPersistedChecked" : 36551,
+  "statusMismatches" : 0,
+  "downstreamRepeatedCalls" : 0,
+  "batchCaptureFirstAttempt" : 0.009792,
+  "batchCaptureEventual" : 0.009792
+}

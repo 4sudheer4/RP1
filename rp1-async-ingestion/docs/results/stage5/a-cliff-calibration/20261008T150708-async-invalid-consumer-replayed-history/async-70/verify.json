@@ -1,0 +1,22 @@
+{
+  "runId" : "rmv03wn81",
+  "eventsGenerated" : 56000,
+  "validEvents" : 56000,
+  "invalidEventsGenerated" : 0,
+  "poisonEvents" : 0,
+  "persistedDistinct" : 0,
+  "duplicateRows" : 0,
+  "missing" : 56000,
+  "missingButInDlt" : 0,
+  "lostUnaccounted" : 56000,
+  "eventCapture" : 0.0,
+  "eventCaptureExcludingPoison" : 0.0,
+  "dltRecordsForRun" : 0,
+  "invalidRoutedToTopic" : 0,
+  "invalidRecordedSyncMode" : 0,
+  "messagesFullyPersistedChecked" : 0,
+  "statusMismatches" : 0,
+  "downstreamRepeatedCalls" : 0,
+  "batchCaptureFirstAttempt" : 0.847143,
+  "batchCaptureEventual" : 1.0
+}

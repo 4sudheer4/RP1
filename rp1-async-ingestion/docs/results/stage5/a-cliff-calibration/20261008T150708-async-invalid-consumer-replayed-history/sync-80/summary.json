@@ -1,0 +1,48 @@
+{
+  "runId" : "rmv03g1b2",
+  "startedAt" : "2026-10-08T22:14:10.463841Z",
+  "finishedAt" : "2026-10-08T22:15:04.907309Z",
+  "config" : {
+    "url" : "http://localhost:8080/callbacks",
+    "rateBatchesPerSec" : 80.0,
+    "durationS" : 40,
+    "batchSize" : 20,
+    "clientTimeoutMs" : 2000,
+    "retries" : 3,
+    "retryDelaysMs" : [ 1000, 2000, 4000 ],
+    "hotFraction" : 0.0,
+    "invalidFraction" : 0.0,
+    "poisonCount" : 0,
+    "suspendAfter" : 0,
+    "suspendMs" : 600000
+  },
+  "batches" : 3200,
+  "events" : 64000,
+  "batchCaptureFirstAttempt" : 0.0,
+  "batchCaptureEventual" : 0.0,
+  "batchesDropped" : 3200,
+  "batchesDroppedBySuspension" : 0,
+  "suspensions" : 0,
+  "httpAttempts" : 12800,
+  "clientAttemptsPerBatch" : 4.0,
+  "statusCounts" : {
+    "first:timeout" : 3200,
+    "retry:timeout" : 9600
+  },
+  "firstAttemptLatencyMs" : {
+    "count" : 3200,
+    "p50" : 2000,
+    "p90" : 2009,
+    "p99" : 2053,
+    "p999" : 2121,
+    "max" : 2156
+  },
+  "allAttemptsLatencyMs" : {
+    "count" : 12800,
+    "p50" : 2000,
+    "p90" : 2007,
+    "p99" : 2049,
+    "p999" : 2121,
+    "max" : 2156
+  }
+}

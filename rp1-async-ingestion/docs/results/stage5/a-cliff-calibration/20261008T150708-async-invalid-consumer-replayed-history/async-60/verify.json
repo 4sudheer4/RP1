@@ -1,0 +1,22 @@
+{
+  "runId" : "rmv03v08z",
+  "eventsGenerated" : 48000,
+  "validEvents" : 48000,
+  "invalidEventsGenerated" : 0,
+  "poisonEvents" : 0,
+  "persistedDistinct" : 0,
+  "duplicateRows" : 0,
+  "missing" : 48000,
+  "missingButInDlt" : 0,
+  "lostUnaccounted" : 48000,
+  "eventCapture" : 0.0,
+  "eventCaptureExcludingPoison" : 0.0,
+  "dltRecordsForRun" : 0,
+  "invalidRoutedToTopic" : 0,
+  "invalidRecordedSyncMode" : 0,
+  "messagesFullyPersistedChecked" : 0,
+  "statusMismatches" : 0,
+  "downstreamRepeatedCalls" : 0,
+  "batchCaptureFirstAttempt" : 0.74625,
+  "batchCaptureEventual" : 1.0
+}

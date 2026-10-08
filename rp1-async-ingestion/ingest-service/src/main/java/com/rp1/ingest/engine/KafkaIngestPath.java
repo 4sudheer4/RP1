@@ -88,8 +88,15 @@ public class KafkaIngestPath implements IngestPath {
     private Outcome fail(long start, Outcome outcome, Throwable cause) {
         breaker.onError(System.nanoTime() - start, TimeUnit.NANOSECONDS,
                 cause != null ? cause : new TimeoutException(outcome.tag()));
-        if (cause != null) log.warn("produce not confirmed: outcome={} cause={}", outcome.tag(), cause.toString());
+        if (cause != null) log.warn("produce not confirmed: outcome={} cause={}", outcome.tag(), rootCause(cause));
         return outcome;
+    }
+
+    /** Spring wraps client errors (KafkaProducerException); the actionable part is the innermost cause. */
+    private static String rootCause(Throwable t) {
+        Throwable r = t;
+        while (r.getCause() != null && r.getCause() != r) r = r.getCause();
+        return r == t ? t.toString() : t.getClass().getSimpleName() + " <- " + r;
     }
 
     static ProducerRecord<String, byte[]> record(CallbackEnvelope e) {

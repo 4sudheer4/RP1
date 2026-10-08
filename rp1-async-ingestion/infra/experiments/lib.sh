@@ -42,9 +42,21 @@ ensure_brokers() {
   done
 }
 
+# Each run starts from an empty database, so the consumer group must start at the end of every topic; otherwise
+# a new or lagging group replays history from earlier runs (auto.offset.reset=earliest) and contaminates the run.
+reset_consumer_group() {
+  local g=${CONSUMER_GROUP:-rp1-consumer} tries=0
+  until docker exec rp1-kafka-1-1 /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server kafka-1:29092 \
+          --group "$g" --reset-offsets --to-latest --all-topics --execute >/dev/null 2>&1; do
+    ((tries++ > 30)) && { echo "could not reset group $g (members still active?)" >&2; exit 1; }
+    sleep 1
+  done
+}
+
 reset_env() {
   tox POST /reset
   ensure_brokers
+  reset_consumer_group
   # Tables exist once a service has run Flyway; ignore errors on a brand-new database.
   psql_rp1 -c "TRUNCATE callback_event, message_status, invalid_event, downstream_call" 2>/dev/null || true
 }

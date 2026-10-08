@@ -1,0 +1,67 @@
+{
+  "runId" : "rmv03wn81",
+  "startedAt" : "2026-10-08T22:27:04.794918Z",
+  "finishedAt" : "2026-10-08T22:27:44.841794Z",
+  "config" : {
+    "url" : "http://localhost:8080/callbacks",
+    "rateBatchesPerSec" : 70.0,
+    "durationS" : 40,
+    "batchSize" : 20,
+    "clientTimeoutMs" : 2000,
+    "retries" : 3,
+    "retryDelaysMs" : [ 1000, 2000, 4000 ],
+    "hotFraction" : 0.0,
+    "invalidFraction" : 0.0,
+    "poisonCount" : 0,
+    "suspendAfter" : 0,
+    "suspendMs" : 600000
+  },
+  "batches" : 2800,
+  "events" : 56000,
+  "batchCaptureFirstAttempt" : 0.847143,
+  "batchCaptureEventual" : 1.0,
+  "batchesDropped" : 0,
+  "batchesDroppedBySuspension" : 0,
+  "suspensions" : 0,
+  "httpAttempts" : 3804,
+  "clientAttemptsPerBatch" : 1.358571,
+  "statusCounts" : {
+    "first:200" : 2372,
+    "first:503" : 428,
+    "retry:200" : 428,
+    "retry:503" : 576
+  },
+  "firstAttemptLatencyMs" : {
+    "count" : 2800,
+    "p50" : 27,
+    "p90" : 224,
+    "p99" : 830,
+    "p999" : 1265,
+    "max" : 1276
+  },
+  "allAttemptsLatencyMs" : {
+    "count" : 3804,
+    "p50" : 21,
+    "p90" : 194,
+    "p99" : 763,
+    "p999" : 1253,
+    "max" : 1276
+  },
+  "serverMetricsDelta" : {
+    "rp1_ingest_ack_latency_seconds_count{application=\"ingest-service\",cause=\"accepted\",mode=\"async\",status=\"200\"}" : 2800.0,
+    "rp1_ingest_ack_latency_seconds_count{application=\"ingest-service\",cause=\"breaker_open\",mode=\"async\",status=\"503\"}" : 931.0,
+    "rp1_ingest_ack_latency_seconds_count{application=\"ingest-service\",cause=\"produce_failed\",mode=\"async\",status=\"503\"}" : 73.0,
+    "rp1_ingest_ack_latency_seconds_max{application=\"ingest-service\",cause=\"accepted\",mode=\"async\",status=\"200\"}" : 1.201012417,
+    "rp1_ingest_ack_latency_seconds_max{application=\"ingest-service\",cause=\"breaker_open\",mode=\"async\",status=\"503\"}" : 0.072085583,
+    "rp1_ingest_ack_latency_seconds_max{application=\"ingest-service\",cause=\"produce_failed\",mode=\"async\",status=\"503\"}" : 1.237263208,
+    "rp1_ingest_ack_latency_seconds_sum{application=\"ingest-service\",cause=\"accepted\",mode=\"async\",status=\"200\"}" : 189.082800821,
+    "rp1_ingest_ack_latency_seconds_sum{application=\"ingest-service\",cause=\"breaker_open\",mode=\"async\",status=\"503\"}" : 0.38208215,
+    "rp1_ingest_ack_latency_seconds_sum{application=\"ingest-service\",cause=\"produce_failed\",mode=\"async\",status=\"503\"}" : 60.327449171,
+    "rp1_ingest_events_total{application=\"ingest-service\",result=\"valid\"}" : 76080.0,
+    "rp1_ingest_produce_failures_total{application=\"ingest-service\",cause=\"error\"}" : 73.0,
+    "rp1_ingest_responses_total{application=\"ingest-service\",cause=\"accepted\",mode=\"async\",status=\"200\"}" : 2800.0,
+    "rp1_ingest_responses_total{application=\"ingest-service\",cause=\"breaker_open\",mode=\"async\",status=\"503\"}" : 931.0,
+    "rp1_ingest_responses_total{application=\"ingest-service\",cause=\"produce_failed\",mode=\"async\",status=\"503\"}" : 73.0,
+    "rp1_ingest_signature_total{application=\"ingest-service\",key=\"current\"}" : 3804.0
+  }
+}
