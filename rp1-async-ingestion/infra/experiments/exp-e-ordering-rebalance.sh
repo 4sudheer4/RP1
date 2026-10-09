@@ -2,7 +2,7 @@
 # Experiment (e): per-subscriber ordering / final-state correctness across rebalances (async).
 # Consumers join at t=15s and t=30s, one is kill -9'd at t=45s, then another joins. Hot-key traffic included.
 # Expect: zero lost, zero duplicate rows, zero status mismatches (late events never regress state).
-if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
+if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -dims "$0" "$@"; fi
 source "$(dirname "$0")/lib.sh"
 RATE=${RATE:-40}; DURATION=${DURATION:-75}
 

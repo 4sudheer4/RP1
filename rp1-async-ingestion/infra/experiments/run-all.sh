@@ -2,7 +2,7 @@
 # Runs every Stage 5 experiment in sequence (~75 min on a laptop). Each writes docs/results/stage5/<name>/<ts>/.
 # Prereqs: compose stack up (docker compose -f infra/docker-compose.yml up -d --wait) and jars built
 # (mvn -q install -DskipTests). Keep the machine awake and on power.
-if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
+if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -dims "$0" "$@"; fi
 set -uo pipefail
 cd "$(dirname "$0")"
 step() { echo "##### $* $(date +%T)"; "$@" || echo "##### FAILED $*"; }

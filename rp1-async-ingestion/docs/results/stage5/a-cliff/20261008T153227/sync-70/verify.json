@@ -1,0 +1,22 @@
+{
+  "runId" : "rmv046khq",
+  "eventsGenerated" : 56000,
+  "validEvents" : 56000,
+  "invalidEventsGenerated" : 0,
+  "poisonEvents" : 0,
+  "persistedDistinct" : 56000,
+  "duplicateRows" : 0,
+  "missing" : 0,
+  "missingButInDlt" : 0,
+  "lostUnaccounted" : 0,
+  "eventCapture" : 1.0,
+  "eventCaptureExcludingPoison" : 1.0,
+  "dltRecordsForRun" : 0,
+  "invalidRoutedToTopic" : 0,
+  "invalidRecordedSyncMode" : 0,
+  "messagesFullyPersistedChecked" : 28399,
+  "statusMismatches" : 0,
+  "downstreamRepeatedCalls" : 0,
+  "batchCaptureFirstAttempt" : 0.16,
+  "batchCaptureEventual" : 0.188929
+}

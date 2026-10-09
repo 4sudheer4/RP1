@@ -6,7 +6,7 @@
 # usage: exp-a-cliff.sh [--modes "sync async"] [--rates "40 60 ..."] [--duration 40] [--ens-suspension]
 #   --ens-suspension: model SFMC ENS callback suspension (official docs: 2+ consecutive delivery failures in 5 min
 #   -> suspended 10 min, events dropped meanwhile). Time-scaled 60x for a short run: 10 min -> 10 s.
-if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
+if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -dims "$0" "$@"; fi
 source "$(dirname "$0")/lib.sh"
 
 MODES="sync async"; RATES="40 60 70 80 90 100 120"; DURATION=40; ENS=(); ENS_DESC=off

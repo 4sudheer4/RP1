@@ -1,0 +1,22 @@
+{
+  "runId" : "rmv04is0j",
+  "eventsGenerated" : 96000,
+  "validEvents" : 96000,
+  "invalidEventsGenerated" : 0,
+  "poisonEvents" : 0,
+  "persistedDistinct" : 76900,
+  "duplicateRows" : 0,
+  "missing" : 19100,
+  "missingButInDlt" : 0,
+  "lostUnaccounted" : 19100,
+  "eventCapture" : 0.801042,
+  "eventCaptureExcludingPoison" : 0.801042,
+  "dltRecordsForRun" : 0,
+  "invalidRoutedToTopic" : 0,
+  "invalidRecordedSyncMode" : 0,
+  "messagesFullyPersistedChecked" : 35686,
+  "statusMismatches" : 0,
+  "downstreamRepeatedCalls" : 0,
+  "batchCaptureFirstAttempt" : 0.008125,
+  "batchCaptureEventual" : 0.008125
+}

@@ -64,13 +64,17 @@ rp1:
     verification:
       enabled: ${RP1_ENS_VERIFICATION_ENABLED:false}
       expected-callback-id: ${RP1_ENS_CALLBACK_ID:}
+    # Opens only on calls that FAILED (error, timeout, missed deadline). A slow call that still returned 200 inside
+    # the deadline must never count: with a 1s slow-call rule, one ~1s Kafka stall opened the breaker and turned 31
+    # slow-but-successful requests into ~1100 needless 503s (Stage 5, a-cliff/20261008T153227 async-80).
+    # Short open window so SFMC's retries (seconds apart) land in half-open rather than being rejected again.
     breaker:
       failure-rate-threshold: 50
-      sliding-window-size: 20
-      minimum-number-of-calls: 10
-      wait-in-open-state: 5s
-      slow-call-threshold: 1000ms
-      slow-call-rate-threshold: 80
+      sliding-window-size: 50           # last 50 calls (~0.5s at 100 req/s)
+      minimum-number-of-calls: 20
+      wait-in-open-state: 2s
+      slow-call-threshold: 1500ms       # = hard deadline: only calls that missed it, which already failed
+      slow-call-rate-threshold: 100
     sync:
       client-timeout: 2s
 

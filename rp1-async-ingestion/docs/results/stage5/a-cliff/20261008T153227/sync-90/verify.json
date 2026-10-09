@@ -1,0 +1,22 @@
+{
+  "runId" : "rmv04bltv",
+  "eventsGenerated" : 72000,
+  "validEvents" : 72000,
+  "invalidEventsGenerated" : 0,
+  "poisonEvents" : 0,
+  "persistedDistinct" : 70760,
+  "duplicateRows" : 0,
+  "missing" : 1240,
+  "missingButInDlt" : 0,
+  "lostUnaccounted" : 1240,
+  "eventCapture" : 0.982778,
+  "eventCaptureExcludingPoison" : 0.982778,
+  "dltRecordsForRun" : 0,
+  "invalidRoutedToTopic" : 0,
+  "invalidRecordedSyncMode" : 0,
+  "messagesFullyPersistedChecked" : 35180,
+  "statusMismatches" : 0,
+  "downstreamRepeatedCalls" : 0,
+  "batchCaptureFirstAttempt" : 0.032778,
+  "batchCaptureEventual" : 0.034722
+}

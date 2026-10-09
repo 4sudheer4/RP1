@@ -8,7 +8,7 @@
 set -uo pipefail
 
 # Timing checks are meaningless if the laptop idle-sleeps mid-run (it did, on battery). Hold a no-sleep assertion.
-if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
+if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -dims "$0" "$@"; fi
 
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 INFRA=$ROOT/infra

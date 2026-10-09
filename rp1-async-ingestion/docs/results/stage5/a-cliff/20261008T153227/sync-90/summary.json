@@ -1,0 +1,50 @@
+{
+  "runId" : "rmv04bltv",
+  "startedAt" : "2026-10-08T22:38:43.077933Z",
+  "finishedAt" : "2026-10-08T22:39:37.190332Z",
+  "config" : {
+    "url" : "http://localhost:8080/callbacks",
+    "rateBatchesPerSec" : 90.0,
+    "durationS" : 40,
+    "batchSize" : 20,
+    "clientTimeoutMs" : 2000,
+    "retries" : 3,
+    "retryDelaysMs" : [ 1000, 2000, 4000 ],
+    "hotFraction" : 0.0,
+    "invalidFraction" : 0.0,
+    "poisonCount" : 0,
+    "suspendAfter" : 0,
+    "suspendMs" : 600000
+  },
+  "batches" : 3600,
+  "events" : 72000,
+  "batchCaptureFirstAttempt" : 0.032778,
+  "batchCaptureEventual" : 0.034722,
+  "batchesDropped" : 3475,
+  "batchesDroppedBySuspension" : 0,
+  "suspensions" : 0,
+  "httpAttempts" : 14032,
+  "clientAttemptsPerBatch" : 3.897778,
+  "statusCounts" : {
+    "first:200" : 118,
+    "first:timeout" : 3482,
+    "retry:200" : 7,
+    "retry:timeout" : 10425
+  },
+  "firstAttemptLatencyMs" : {
+    "count" : 3600,
+    "p50" : 2000,
+    "p90" : 2003,
+    "p99" : 2173,
+    "p999" : 2264,
+    "max" : 2310
+  },
+  "allAttemptsLatencyMs" : {
+    "count" : 14032,
+    "p50" : 1999,
+    "p90" : 2002,
+    "p99" : 2177,
+    "p999" : 2260,
+    "max" : 2310
+  }
+}

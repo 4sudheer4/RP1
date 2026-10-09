@@ -4,7 +4,7 @@
 #   phase 2: link cut (proxies disabled)
 # Expect: every response inside the deadline (fast 503s, no hang), breaker opens, full recovery afterwards,
 # and SFMC-style retries bring eventual capture back up; zero lost acked events.
-if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
+if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -dims "$0" "$@"; fi
 source "$(dirname "$0")/lib.sh"
 RATE=${RATE:-40}; DURATION=${DURATION:-100}
 

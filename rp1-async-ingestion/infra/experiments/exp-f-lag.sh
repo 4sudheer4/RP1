@@ -2,7 +2,7 @@
 # Experiment (f): arrival at ~1.5x consumer capacity (async). Ingest keeps acking fast; lag and the age of the
 # oldest unprocessed message grow during the burst; after it, measure drain time.
 # Capacity: one consumer, downstream 8 x 5ms/event => ~1600 events/s => 80 batches/s of 20. 1.5x = 120 b/s.
-if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
+if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -dims "$0" "$@"; fi
 source "$(dirname "$0")/lib.sh"
 RATE=${RATE:-120}; DURATION=${DURATION:-60}
 

@@ -1,0 +1,22 @@
+{
+  "runId" : "rmv05uk3l",
+  "eventsGenerated" : 96000,
+  "validEvents" : 96000,
+  "invalidEventsGenerated" : 0,
+  "poisonEvents" : 0,
+  "persistedDistinct" : 18054,
+  "duplicateRows" : 0,
+  "missing" : 77886,
+  "missingButInDlt" : 0,
+  "lostUnaccounted" : 77886,
+  "eventCapture" : 0.188063,
+  "eventCaptureExcludingPoison" : 0.188063,
+  "dltRecordsForRun" : 0,
+  "invalidRoutedToTopic" : 0,
+  "invalidRecordedSyncMode" : 0,
+  "messagesFullyPersistedChecked" : 8697,
+  "statusMismatches" : 0,
+  "downstreamRepeatedCalls" : 0,
+  "batchCaptureFirstAttempt" : 1.0,
+  "batchCaptureEventual" : 1.0
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Experiment (b): kill a broker mid-run (async mode). Expect: zero lost events, zero duplicate rows, zero status
 # mismatches; some 503s during leader failover that SFMC-style retries recover.
-if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
+if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -dims "$0" "$@"; fi
 source "$(dirname "$0")/lib.sh"
 RATE=${RATE:-40}; DURATION=${DURATION:-90}; KILL_AT=${KILL_AT:-30}; RESTART_AT=${RESTART_AT:-60}; BROKER=${BROKER:-kafka-2}
 

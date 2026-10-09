@@ -38,7 +38,7 @@ public class IngestConfig {
     @ConditionalOnProperty(name = "rp1.ingest.mode", havingValue = "async", matchIfMissing = true)
     static class Async {
         /**
-         * Count-based breaker around produce. Opens when produce calls fail/time out or run slow, then rejects
+         * Count-based breaker around produce. Opens when produce calls fail or miss the deadline, then rejects
          * instantly (503) for waitInOpenState, so a Kafka outage costs ~0ms per request instead of the full deadline.
          */
         @Bean
@@ -52,7 +52,7 @@ public class IngestConfig {
                     .slowCallDurationThreshold(b.slowCallThreshold())
                     .slowCallRateThreshold(b.slowCallRateThreshold())
                     .waitDurationInOpenState(b.waitInOpenState())
-                    .permittedNumberOfCallsInHalfOpenState(3)
+                    .permittedNumberOfCallsInHalfOpenState(10) // 3 trial calls at ~100 req/s decide too much on too little
                     .automaticTransitionFromOpenToHalfOpenEnabled(true)
                     .build());
             // 0 closed, 1 open, 2 half-open (alertable)

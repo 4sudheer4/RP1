@@ -1,0 +1,59 @@
+{
+  "runId" : "rmv07624c",
+  "startedAt" : "2026-10-08T23:58:23.057784Z",
+  "finishedAt" : "2026-10-09T00:17:24.144276Z",
+  "config" : {
+    "url" : "http://localhost:8080/callbacks",
+    "rateBatchesPerSec" : 40.0,
+    "durationS" : 40,
+    "batchSize" : 20,
+    "clientTimeoutMs" : 2000,
+    "retries" : 3,
+    "retryDelaysMs" : [ 1000, 2000, 4000 ],
+    "hotFraction" : 0.0,
+    "invalidFraction" : 0.0,
+    "poisonCount" : 0,
+    "suspendAfter" : 2,
+    "suspendMs" : 10000
+  },
+  "batches" : 1600,
+  "events" : 32000,
+  "batchCaptureFirstAttempt" : 0.533125,
+  "batchCaptureEventual" : 0.554375,
+  "batchesDropped" : 713,
+  "batchesDroppedBySuspension" : 713,
+  "suspensions" : 17,
+  "httpAttempts" : 921,
+  "clientAttemptsPerBatch" : 0.575625,
+  "statusCounts" : {
+    "first:200" : 853,
+    "first:conn_error" : 4,
+    "first:timeout" : 30,
+    "retry:200" : 34
+  },
+  "firstAttemptLatencyMs" : {
+    "count" : 887,
+    "p50" : 442,
+    "p90" : 1041,
+    "p99" : 1343,
+    "p999" : 1401,
+    "max" : 1401
+  },
+  "allAttemptsLatencyMs" : {
+    "count" : 921,
+    "p50" : 428,
+    "p90" : 1020,
+    "p99" : 1340,
+    "p999" : 1401,
+    "max" : 1401
+  },
+  "serverMetricsDelta" : {
+    "rp1_ingest_ack_latency_seconds_count{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 917.0,
+    "rp1_ingest_ack_latency_seconds_max{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 1.488237458,
+    "rp1_ingest_ack_latency_seconds_sum{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 490.119497427,
+    "rp1_ingest_events_total{application=\"ingest-service\",result=\"valid\"}" : 18340.0,
+    "rp1_ingest_responses_total{application=\"ingest-service\",cause=\"accepted\",mode=\"sync\",status=\"200\"}" : 917.0,
+    "rp1_ingest_signature_total{application=\"ingest-service\",key=\"current\"}" : 917.0,
+    "rp1_ingest_sync_batches_total{application=\"ingest-service\",late=\"false\"}" : 917.0
+  }
+}

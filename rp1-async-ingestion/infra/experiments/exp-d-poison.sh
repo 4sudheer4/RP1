@@ -3,7 +3,7 @@
 # Poison = subscriberKey "poison-*" makes the simulated downstream reject permanently (400).
 # Expect: poison events in DLT (missingButInDlt == poison), everything else persisted, e2e latency normal,
 # replaying the DLT re-DLTs the poison (still bad) and creates no duplicate rows.
-if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -i "$0" "$@"; fi
+if [[ $(uname) == Darwin && -z ${RP1_CAFFEINATED:-} ]]; then RP1_CAFFEINATED=1 exec caffeinate -dims "$0" "$@"; fi
 source "$(dirname "$0")/lib.sh"
 RATE=${RATE:-30}; DURATION=${DURATION:-60}; POISON=${POISON:-25}
 
