@@ -18,7 +18,7 @@ every number in the docs.
 | 2 | common + ingest-service (async + sync baseline) | gate: 29 unit + 5 IT green ([results](docs/results/stage2/)) |
 | 3 | consumer-service: idempotent sink, retry topics, DLT, state guard | gate: kill -9, poison, rebalance, out-of-order ITs green ([results](docs/results/stage3/)) |
 | 4 | loadgen + verifier | sync cliff reproduced on the real stack ([calibration](docs/results/stage5/a-cliff-calibration/)) |
-| 5 | experiments (a)–(f) | [docs/results/stage5/](docs/results/stage5/) |
+| 5 | experiments (a)–(f) | (a) sync 40–120 + async 40–90 done ([results](docs/results/stage5/a-cliff/20261008T153227/results.md)); async 100/120, ENS sweep re-run and (b)–(f) **pending**: laptop slept mid-run, `infra/experiments/run-remaining.sh` |
 | 6 | metrics, dashboard, 19 alert rules, GitHub Actions | [alerts](infra/prometheus/alerts.yml), [dashboard](infra/grafana/dashboards/rp1-overview.json), [CI](../.github/workflows/rp1.yml) |
 | 7 | docs | ARCHITECTURE / EDGE_CASES / DEFENSE |
 
